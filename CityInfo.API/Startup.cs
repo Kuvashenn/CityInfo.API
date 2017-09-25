@@ -17,12 +17,19 @@ namespace CityInfo.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public static IConfiguration Configuration { get; private set; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(env.ContentRootPath)
+            //    .AddJsonFile("mailSettings.json", optional: false, reloadOnChange: true);
+            //Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
