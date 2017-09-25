@@ -57,12 +57,13 @@ namespace CityInfo.API
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
-            var connectionString = @"Server=LAPTOP-BPSC1OV9\CYBERSERVER;Database=CityInfoDB; User Id=sa; Password=P@ssword1234$";
+            var connectionString = Startup.Configuration["connectionStrings:cityInfoDBConnectionString"];
             services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            CityInfoContext cityInfoContext)
         {
 
             loggerFactory.AddConsole();
@@ -75,6 +76,12 @@ namespace CityInfo.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler();
+            }
+
+            cityInfoContext.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
             app.UseMvc();
